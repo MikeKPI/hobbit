@@ -1,10 +1,7 @@
 class AlphabetClass:
     data_types = {
-        'string':   1,
-        'bool':     2,
         'int':      3,
-        'float':    4,
-        'void':     5
+        'float':    4
     }
     splitters = {
         '<':        10,
@@ -13,8 +10,6 @@ class AlphabetClass:
         '>=':       13,
         '!=':       14,
         '==':       15,
-        '&&':       16,
-        '||':       17,
         '=':        21,
         '+':        22,
         '-':        23,

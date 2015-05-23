@@ -2,10 +2,12 @@ class Unit:
     LASTS = 0
     FIRSTS = 1
 
-    def __init__(self, token: str):
+    def __init__(self, token):
         self.token = token
-        self.lasts = {}
-        self.firsts = {}
+        self.lasts = set()
+        self.firsts = set()
+        self.equals = set()
+        self.name = token.name
 
     def buildPlus(self, type: int):
         operable = self.lasts if type == self.LASTS else self.firsts
@@ -18,7 +20,16 @@ class Unit:
             position = tmp_position
 
     def __str__(self):
-        return '{name}'.format(name=self.token)
+        return '---------------------\n' \
+               '{name}' \
+               '\tfirsts: {firsts}\n' \
+               '\tlasts: {lasts}\n' \
+               '\tequals: {equals}\n' \
+               '---------------------\n'\
+            .format(name=self.token,
+                    firsts=[i.name for i in self.firsts],
+                    lasts=[i.name for i in self.lasts],
+                    equals=[i.name for i in self.equals])
 
 
 if __name__ == '__main__':

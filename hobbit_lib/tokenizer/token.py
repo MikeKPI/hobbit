@@ -7,10 +7,11 @@ class Token:
     constant_id = None
     value = None
 
-    def __init__(self, name, type, line_number):
+    def __init__(self, name, type, line_number, language_id=0):
         self.name = name
         self.type = type
         self.line_number = line_number
+        self.language_id = language_id
 
     @staticmethod
     def fromDict(dictionary):
@@ -27,16 +28,17 @@ class Token:
         method represent Token in readable form
         :returns representing string
         """
-        return format('line: {!s:>5} \u007c token: {!s:>20} \u007c type: {!s:>6} \u007c alphabet_id: {!s:>5} '
-                      '\u007c variable_id: {!s:>5} \u007c constant_id: {!s:>5} \u007c value: {!s}'
-                      .format(self.line_number, self.name, self.type, self.language_id,
-                              self.variable_id, self.constant_id, self.value))
+        return self.name
+        # return format('line: {!s:>5} \u007c token: {!s:>20} \u007c type: {!s:>6} \u007c alphabet_id: {!s:>5} '
+        #               '\u007c variable_id: {!s:>5} \u007c constant_id: {!s:>5} \u007c value: {!s}'
+        #               .format(self.line_number, self.name, self.type, self.language_id,
+        #                       self.variable_id, self.constant_id, self.value))
 
     def __eq__(self, other):
         return self.name == other.name
 
     def __hash__(self):
-        return hash([self.name, self.line_number])
+        return hash((self.name, self.line_number))
 
     def toDict(self):
         """
