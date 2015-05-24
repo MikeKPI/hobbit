@@ -4,6 +4,7 @@ from hobbit_lib.tokenizer.common.checkers import isDoubleHook
 from hobbit_lib.tokenizer.common.error import EmptyLineReadingException, SymbolNotFoundException, \
     InvalidRecordOfFloatNumberException, UnexpectedSymbolException, WrongStringVariableEndException
 from hobbit_lib.tokenizer.token import Token
+from hobbit_lib.tokenizer.common.alphabet import Alphabet
 
 
 class LineTokenizer:
@@ -193,16 +194,18 @@ class LineTokenizer:
         :returns a tuple with an integer number token
         """
         return tuple([Token(name=self._current_token,
-                      type='int',
-                      line_number=self._line_number)])
+                            type='int',
+                            line_number=self._line_number,
+                            language_id=Alphabet.getCode(self._current_token))])
 
     def _getFloat(self):
         """
         :returns a tuple with a float number token
         """
         return tuple([Token(name=self._current_token,
-                      type='',
-                      line_number=self._line_number)])
+                            type='',
+                            line_number=self._line_number,
+                            language_id=Alphabet.getCode(self._current_token))])
 
     def _getSplitter(self):
         """
@@ -211,8 +214,9 @@ class LineTokenizer:
         if self._current_token == '\n':
             self._current_token = '\\n'
         return tuple([Token(name=self._current_token,
-                      type='',
-                      line_number=self._line_number)])
+                            type='',
+                            line_number=self._line_number,
+                            language_id=Alphabet.getCode(self._current_token))])
 
     def _getString(self):
         """
@@ -220,16 +224,20 @@ class LineTokenizer:
         :returns a tuple of start splitter token, string and finish splitter token
         """
         return tuple([Token(name=self._current_token[1:-1],
-                      type='',
-                      line_number=self._line_number)])
+                            type='',
+                            line_number=self._line_number,
+                            language_id=Alphabet.getCode(self._current_token))])
 
     def _getToken(self):
         """
         :returns tuple of non-typed Tokens like int, double, lol, etc.
         """
+
         return tuple([Token(name=self._current_token,
-                      type='',
-                      line_number=self._line_number)])
+                            type='',
+                            line_number=self._line_number,
+                            language_id=Alphabet.getCode(self._current_token)
+                            )])
 
     def _push(self, current_symbol):
         """

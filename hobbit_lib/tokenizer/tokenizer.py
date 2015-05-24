@@ -31,14 +31,16 @@ class Tokenizer:
                     tokens = linetokenizer.next()                           # getting next token if it exist
                     for token in tokens:
                         answer.append(token)                                # adding token to tokens list
-                        token.language_id = Alphabet.getCode(token)         # getting alphabet code of toekn
+                        token.language_id = Alphabet.getCode(token.name_value)         # getting alphabet code of toekn
                         if token.type != '':                                # checking is token is a constant
                             if not self._isConstant(token):
                                 token.constant_id = constant_id             # and adding to constant list
                                 constant_id += 1
+                                token.name = 'CONST'
                                 self.constants.append(token)
                             else:
                                 token.constant_id = self.constants.index(token)
+                                token.name = 'CONST'
                             token.value = token.name
                             continue
                         elif Alphabet.isDataType(token):                    # checking for start of process of creating
@@ -53,13 +55,13 @@ class Tokenizer:
                                 continue
                             else:
                                 raise OverriddenException(lnumber=line_number)
+                        elif self._isVariable(token):
+                            token.variable_id = self.variables.index(token)
+                            continue
                         elif not Alphabet.isReserved(token) and \
                                 not self._isVariable(token) and \
                                 not self._isConstant(token):                        # if token reserved
                             raise UnknownVariableException(lnumber=line_number)     # we raise an Exception
-                        elif self._isVariable(token):
-                            token.variable_id = self.variables.index(token)
-                            continue
 
                 except Exception as e:                                      # catching and printing any exception
                     raise e

@@ -7,19 +7,23 @@ class Token:
     constant_id = None
     value = None
 
-    def __init__(self, name, type, line_number, language_id=0):
-        self.name = name
+    def __init__(self, name, type, line_number, language_id=None):
+        self.language_id = 64 if name == 'main' else 0 if language_id is None else language_id
+        self.name = 'ID' if self.language_id == 0 else name
         self.type = type
         self.line_number = line_number
-        self.language_id = language_id
+        self.name_value = name
 
     @staticmethod
     def fromDict(dictionary):
         new = Token(dictionary['name'],
                     dictionary['type'],
-                    dictionary['line_number'])
-        new.language_id = dictionary['alphabet_id']
+                    dictionary['line_number'],
+                    dictionary['alphabet_id'])
         new.variable_id = dictionary['variable_id']
+        new.constant_id = dictionary['constant_id']
+        new.constant_id = eval(dictionary['value'])
+        new.name_value = dictionary['name_value']
 
         return new
 
@@ -52,5 +56,6 @@ class Token:
             "alphabet_id": self.language_id,
             "variable_id": self.variable_id,
             "constant_id": self.constant_id,
-            "value": self.value
+            "value": self.value,
+            "name_value": self.name_value,
         }

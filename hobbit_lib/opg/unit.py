@@ -31,6 +31,11 @@ class Unit:
                     lasts=[i.name for i in self.lasts],
                     equals=[i.name for i in self.equals])
 
+    def __eq__(self, other):
+        return self.name == other.name
+
+    def __hash__(self):
+        return hash(tuple([self.token, self.name, tuple(self.lasts), tuple(self.firsts), tuple(self.equals)]))
 
 if __name__ == '__main__':
     a = Unit('a')

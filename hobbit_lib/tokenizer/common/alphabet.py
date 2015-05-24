@@ -24,7 +24,7 @@ class AlphabetClass:
         '"':        54,
         ';':        55,
         '#':        102,
-        '\\n':      103,
+        r'\n':      103,
     }
     key_words = {
         'if':       60,
@@ -73,15 +73,13 @@ class AlphabetClass:
         try to get a code of variable
         :returns if it's an alphabet key it returns code, otherwise - 0
         """
-        try:
-            return self.splitters[var.name]             # tries to return a code of splitter for var
-        except KeyError:
-            try:
-                return self.data_types[var.name]        # tries to return a code of data type for var
-            except KeyError:
-                try:
-                    return self.key_words[var.name]     # trie to return a code of key word for var
-                except KeyError:                        # if all tries are unsuccessful return 0
-                    return 0
+        if var in self.splitters:
+            return self.splitters[var]
+        elif var in self.data_types:
+            return self.data_types[var]
+        elif var in self.key_words:
+            return self.key_words[var]
+        else:
+            return 0
 
 Alphabet = AlphabetClass()
