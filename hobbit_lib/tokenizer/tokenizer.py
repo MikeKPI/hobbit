@@ -66,7 +66,7 @@ class Tokenizer:
                 except Exception as e:                                      # catching and printing any exception
                     raise e
         return {
-            'tokens':       answer,
+            'tokens':       [i for i in answer],
             'variables':    self.variables,
             'constants':    self.constants
         }

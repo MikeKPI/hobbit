@@ -38,11 +38,16 @@ class Token:
         #               .format(self.line_number, self.name, self.type, self.language_id,
         #                       self.variable_id, self.constant_id, self.value))
 
+
+    def __repr__(self):
+        return self.name
+
     def __eq__(self, other):
         return self.name == other.name
 
     def __hash__(self):
-        return hash((self.name, self.line_number))
+        t = hash((self.name,))
+        return t
 
     def toDict(self):
         """

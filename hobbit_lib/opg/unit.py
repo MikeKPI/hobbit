@@ -8,16 +8,17 @@ class Unit:
         self.firsts = set()
         self.equals = set()
         self.name = token.name
-
-    def buildPlus(self, type: int):
-        operable = self.lasts if type == self.LASTS else self.firsts
-        position = 0
-        while position < len(operable):
-            tmp_position = len(operable)
-            tmp_lasts = list(operable)
-            for i in range(position, len(operable)):
-                self.lasts |= set(tmp_lasts[i].lasts)
-            position = tmp_position
+    #
+    # def buildPlus(self, type: int):
+    #     operable = self.lasts if type == self.LASTS else self.firsts
+    #     position = 0
+    #     while position < len(operable):
+    #         tmp_position = len(operable)
+    #         tmp_lasts = list(operable)
+    #         for i in range(position, len(operable)):
+    #             print(self.lasts, tmp_lasts[i].lasts)
+    #             self.lasts ^= tmp_lasts[i].lasts
+    #         position = tmp_position
 
     def __str__(self):
         return '---------------------\n' \
