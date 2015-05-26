@@ -110,7 +110,6 @@ class RelationsTable:
                             for j in self._relations_dict[S].firsts:
                                 self.relations_table[i.token][j.token] += '>' if self.relations_table[i.token][j.token] != '>' else ''
 
-        self.relations_table[create_non_terminal('<operator_lv1>')][create_non_terminal('<mp_body>')] = '<'
         # STEP 4 adding blocking tokens
         tmp = create_non_terminal('#')
         for row in self.relations_table:
