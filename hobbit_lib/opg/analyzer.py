@@ -27,10 +27,12 @@ class OPGAnalyzer:
         self.stack.append(create_non_terminal('#'))
         self.input.append(create_non_terminal('#'))
         self.log.append(self._create_log_item(iteration=0, relation='<'))
+        last_symbol = None
         for iteration in self._iteration_counter():
             flag = True
             if self.log[-1]['relation'] != '>' and flag:
                 element = self.input[0]
+                last_symbol = copy(element) if element.name != '#' else last_symbol
                 relation = self._relations_table[self.stack[-1]][element]
                 self.stack.append(element)
                 self.input = self.input[1:]
@@ -42,7 +44,7 @@ class OPGAnalyzer:
                         break
 
                 if position is None:
-                    raise Exception('Syntax error')
+                    raise Exception(last_symbol)
 
                 try:
                     tmp_rule = tuple(self.stack[i:-1])
@@ -53,20 +55,17 @@ class OPGAnalyzer:
                     self.input.insert(0, tmp)
                     self.log.append(self._create_log_item(iteration=iteration,
                                                           relation=self._relations_table[self.stack[-2]][self.stack[-1]]))
-                    print(self.log[-1])
+                    yield self.log[-1]
                     continue
                 except KeyError:
                     if tmp_rule[0] == create_non_terminal('<main>') and\
                             len(tmp_rule) == 1:
                         break
-                    raise Exception('No such rule: ',
-                                    ' '.join([i.name for i in tmp_rule]))
-
-                # relation = self._relations_table[self.stack[-1]][tmp_token]
+                    raise Exception(last_symbol)
 
             self.log.append(self._create_log_item(iteration=iteration,
                                                   relation=relation))
-            print(self.log[-1])
+            yield (self.log[-1])
 
     def _create_log_item(self, iteration, relation):
         tmp = copy(self.__LOG_ELEMENT_TEMPLATE)
@@ -104,4 +103,4 @@ if __name__ == '__main__':
             analyzer.analyze()
             print('OK')
         except Exception as e:
-            print(' '.join(e.args))
+            print('At line {!s} you have an error in symbol {}'.format(e.args[0].line_number + 1, e.args[0].name))

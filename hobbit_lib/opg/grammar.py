@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-from tokenizer.token import Token
+from opg.token import Token
 
 create_non_terminal = lambda name: Token(name=name, type='', line_number=0, language_id=-1)
 create_terminal = lambda name, language_id: Token(name=name, type='', line_number=0, language_id=language_id)

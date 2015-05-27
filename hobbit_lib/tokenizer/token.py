@@ -32,7 +32,7 @@ class Token:
         method represent Token in readable form
         :returns representing string
         """
-        return self.name
+        return self.name_value
         # return format('line: {!s:>5} \u007c token: {!s:>20} \u007c type: {!s:>6} \u007c alphabet_id: {!s:>5} '
         #               '\u007c variable_id: {!s:>5} \u007c constant_id: {!s:>5} \u007c value: {!s}'
         #               .format(self.line_number, self.name, self.type, self.language_id,
@@ -40,10 +40,10 @@ class Token:
 
 
     def __repr__(self):
-        return self.name
+        return self.name_value
 
     def __eq__(self, other):
-        return self.name == other.name
+        return self.name_value == other.name_value
 
     def __hash__(self):
         t = hash((self.name,))
