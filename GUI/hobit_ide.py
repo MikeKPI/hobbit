@@ -14,6 +14,7 @@ class HobbitGUI(Tk):
         self.initialize()
         self.title("Hobbit IDE")
         self.tz = None
+        self.log = []
 
     def initialize(self):
         self.grid()
@@ -47,6 +48,9 @@ class HobbitGUI(Tk):
         btnAnalyze = Button(self, text='Analyze',
                             command=self.analyze)
         btnAnalyze.grid(column=2, row=17)
+        btnRun = Button(self, text='RUN',
+                        command=self.run)
+        btnRun.grid(column=4, row=17)
 
     def test(self):
         source_code = self.inputField.get('1.0', 'end').split('\n')
@@ -59,7 +63,8 @@ class HobbitGUI(Tk):
             self.errorsTable.insert(END, "No data to analyze.")
         try:
             a = OPGAnalyzer(self.tz['tokens'][:-2], grammar=grammar, grammar_elements=grammar_elements)
-            for i in a.analyze():
+            self.log = [i for i in a.analyze()]
+            for i in self.log:
                 self.errorsTable1.insert(END, i)
             self.errorsTable.insert(END, 'OK')
         except Exception as e:
@@ -93,6 +98,12 @@ class HobbitGUI(Tk):
 
         for i in self.tz['constants']:
             self.constantTable.insert(END, i)
+
+    def run(self):
+        from hobbit_lib.rpn.executor import execute
+
+        print(self.log[-1]['rpn'])
+        self.errorsTable.insert(END, execute(self.log[-1]['rpn']))
 
 
 if __name__ == '__main__':

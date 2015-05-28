@@ -41,7 +41,7 @@ class Tokenizer:
                             else:
                                 token.constant_id = self.constants.index(token)
                                 token.name = 'CONST'
-                            token.value = token.name
+                            token.value = eval(token.name_value)
                             continue
                         elif Alphabet.isDataType(token):                    # checking for start of process of creating
                             new_variable_create_flag = True                 # new variable
