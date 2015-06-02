@@ -67,7 +67,7 @@ class LineTokenizer:
         elif isWhiteSplitter(current_symbol):
             return self._state_1()
         else:
-            print(self._current_token)
+            # print(self._current_token)
             raise SymbolNotFoundException(lnumber=self._line_number)         # rising an error if symbol no found
 
     def _state_2(self):

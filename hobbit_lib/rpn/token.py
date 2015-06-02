@@ -24,10 +24,10 @@ class Token:
         return hash((self.name, self._call))
 
     def __str__(self):
-        return self.name
+        return str(self.name) if self.value is None else '<{}={!s}>'.format(self.name, self.value)
 
     def __repr__(self):
-        return str(self.name)
+        return str(self.name)  # if self.value is None else '<{}={!s}>'.format(self.name, self.value)
 
 
 if __name__ == '__main__':

@@ -9,7 +9,6 @@ class Token:
 
     def __init__(self, name, type, line_number, language_id=None):
         self.language_id = 64 if name == 'main' else 0 if language_id is None else language_id
-        print(name, language_id)
         self.name = 'ID' if self.language_id == 0 else name
         self.type = type
         self.line_number = line_number
