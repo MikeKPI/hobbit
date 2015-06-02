@@ -29,9 +29,9 @@ class OPGAnalyzer:
         self.stack.append(create_non_terminal('#'))
         self.input.append(create_non_terminal('#'))
         self.log.append(self._create_log_item(iteration=0, relation='<', rpn=[]))
-        rpn = self.log[-1]['rpn']
         last_symbol = None
         for iteration in self._iteration_counter():
+            rpn = copy(self.log[-1]['rpn'])
             flag = True
             if self.log[-1]['relation'] != '>' and flag:
                 element = self.input[0]
@@ -71,7 +71,7 @@ class OPGAnalyzer:
                     self.log.append(self._create_log_item(iteration=iteration,
                                                           relation=self._relations_table[self.stack[-2]][
                                                               self.stack[-1]],
-                                                          rpn=rpn))
+                                                          rpn=copy(rpn)))
                     yield self.log[-1]
                     continue
                 except KeyError:
