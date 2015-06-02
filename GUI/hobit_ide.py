@@ -8,6 +8,23 @@ from hobbit_lib.opg.analyzer import OPGAnalyzer
 
 
 class HobbitGUI(Tk):
+    class Text2(Frame):
+        def __init__(self, master, width=0, height=0, **kwargs):
+            self.width = width
+            self.height = height
+
+            Frame.__init__(self, master, width=self.width, height=self.height)
+            self.text_widget = Text(self, **kwargs)
+            self.text_widget.pack(expand=YES, fill=BOTH)
+
+        def pack(self, *args, **kwargs):
+            Frame.pack(self, *args, **kwargs)
+            self.pack_propagate(False)
+
+        def grid(self, *args, **kwargs):
+            Frame.grid(self, *args, **kwargs)
+            self.grid_propagate(False)
+
     def __init__(self, parent=None):
         Tk.__init__(self, parent)
         self.parent = parent
@@ -24,6 +41,10 @@ class HobbitGUI(Tk):
         self.inputField = Text(self)
         self.inputField.grid(column=0, row=0,
                              columnspan=1, rowspan=8, sticky='EW')
+
+        self.inputParamField = Text(self, width=20, height=10)
+        self.inputParamField.grid(column=1, row=5,
+                                  columnspan=2, rowspan=4, sticky='EW')
 
         self.tokensTable = Listbox(self, width=10, height=15, font='Courier')
         self.tokensTable.grid(column=3, row=0,

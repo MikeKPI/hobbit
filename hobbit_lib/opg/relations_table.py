@@ -2,6 +2,7 @@ from collections import OrderedDict
 from copy import copy
 
 from hobbit_lib.opg.unit import Unit
+from hobbit_lib.opg.grammar import create_non_terminal
 
 
 class RelationsTable:
