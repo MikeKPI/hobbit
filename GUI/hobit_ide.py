@@ -3,6 +3,7 @@
 from tkinter import *
 
 from opg.grammar import grammar, grammar_elements
+from rpn.translator import Translator
 from tokenizer.tokenizer import Tokenizer
 from hobbit_lib.opg.analyzer import OPGAnalyzer
 
@@ -71,9 +72,12 @@ class HobbitGUI(Tk):
         btnAnalyze = Button(self, text='Analyze',
                             command=self.analyze)
         btnAnalyze.grid(column=2, row=1)
+        btnRun = Button(self, text='POLIZ',
+                        command=self.on_button_translate)
+        btnRun.grid(column=2, row=2)
         btnRun = Button(self, text='RUN',
                         command=self.run)
-        btnRun.grid(column=2, row=2)
+        btnRun.grid(column=2, row=3)
 
     def test(self):
         source_code = self.inputField.get('1.0', 'end').split('\n')
@@ -129,11 +133,15 @@ class HobbitGUI(Tk):
         for i in self.tz['constants']:
             self.constantTable.insert(END, i)
 
+    def on_button_translate(self):
+        self.source = Translator().translate(self.tz['tokens'])
+        self.errorsTable2.insert(END, self.source)
+
     def run(self):
         from hobbit_lib.rpn.executor import execute
 
-        print(self.log[-1]['rpn'])
-        self.errorsTable.insert(END, execute(self.log[-1]['rpn']))
+        print(self.source)
+        execute(self.source)
 
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@ from copy import copy
 
 from hobbit_lib.opg.relations_table import RelationsTable
 from hobbit_lib.opg.grammar import create_non_terminal
-from hobbit_lib.rpn.translator import get_RPNToken
+from hobbit_lib.rpn.translator import Translator
 
 
 class OPGAnalyzer:
@@ -29,6 +29,7 @@ class OPGAnalyzer:
         self.stack.append(create_non_terminal('#'))
         self.input.append(create_non_terminal('#'))
         self.log.append(self._create_log_item(iteration=0, relation='<', rpn=[]))
+        translator = Translator
         last_symbol = None
         for iteration in self._iteration_counter():
             rpn = copy(self.log[-1]['rpn'])
@@ -54,16 +55,16 @@ class OPGAnalyzer:
                     tmp_token = self.grammar[tmp_rule]
                     print(tmp_token, tmp_rule)
                     if tmp_token.name == '<value>' and self.stack[-3].name != '<data_type>':
-                        rpn.append(get_RPNToken(tmp_rule[0]))
+                        rpn.append(translator.get_RPNToken(tmp_rule[0]))
                     elif tmp_token.name == '<term>' and \
                                     len(tmp_rule) > 1:
-                        rpn.append(get_RPNToken(tmp_rule[1]))
+                        rpn.append(translator.get_RPNToken(tmp_rule[1]))
                     elif tmp_token.name == '<arithmetic_expression_body>':
                         t = len(tmp_rule)
                         if t == 2:
-                            rpn.append(get_RPNToken(tmp_rule[0]))
+                            rpn.append(translator.get_RPNToken(tmp_rule[0]))
                         elif t == 3:
-                            rpn.append(get_RPNToken(tmp_rule[1]))
+                            rpn.append(translator.get_RPNToken(tmp_rule[1]))
                     tmp = self.stack[-1]
                     self.stack = self.stack[:i-len(self.stack)]
                     self.stack.append(tmp_token)
