@@ -1,13 +1,4 @@
 class Token:
-    # TYPES = ("DATATYPE",
-    #          "VARIABLE",
-    #          "CONST",
-    #          "OPERATOR",
-    #          "KEYWORD",
-    #          "SPLITTER",
-    #          "MARKER"
-    #          )
-
     def __init__(self, name, call_action, value=None, reference=None):
         self.name = name
         self.value = value

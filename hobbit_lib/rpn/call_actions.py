@@ -26,7 +26,7 @@ def round_brace_action(self, stack, source, source_position):
 
 def set_action(self, stack, source, source_position):
     stack[0][-2].value = stack[0][-1].value
-    stack[0] = stack[0][:-1]
+    stack[0] = stack[0][:-2]
     return source_position + 1
 
 
@@ -40,4 +40,13 @@ def input_action(self, stack, source, source_position):
     stack[0][-1].value = eval(input("hobbit input: "))
     stack[0] = stack[0][:-1]
     return source_position + 1
-# def if_cycle_start_action(self, stack, source, source_position):
+
+
+def UPL(self, stack, source, source_position):
+    t = source_position + 1 if stack[0][-2].value else source.index(self.reference)
+    stack[0] = stack[0][:-2]
+    return t
+
+
+def next_item(self, stack, source, source_position):
+    return source_position + 1

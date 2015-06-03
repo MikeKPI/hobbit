@@ -2,7 +2,7 @@ def execute(source):
     stack = [[]]
     source_postion = 0
     while source_postion < len(source):
-        # print(source[source_postion])
+        print(stack, source[source_postion])
         source_postion = source[source_postion](stack, source, source_postion)
 
     if len(stack[0]) == 1:
