@@ -1,5 +1,7 @@
 from copy import copy
 
+from hobbit_lib.rpn.token import Token as RPNToken
+
 values = dict()
 
 
@@ -11,29 +13,33 @@ def id_const_action(self, stack, source, source_position):
         else:
             raise KeyError
     except KeyError:
-        values[stack[0][-1]] = stack[0][-1].value
+        if not isinstance(stack[0][-1].name, int):
+            values[stack[0][-1]] = stack[0][-1].value
     return source_position + 1
 
 
 def operator_action_decorator(function):
     def operator_action(self, stack, source, source_position):
-        a = values[stack[0][-2]]
-        b = values[stack[0][-1]]
-        stack[0] = [stack[0][i] for i in range(len(stack[0]) - 1)]
+        a = stack[0][-2].value if stack[0][-2] not in values else values[stack[0][-2]]
+        b = stack[0][-1].value if stack[0][-1] not in values else values[stack[0][-1]]
+        stack[0] = stack[0][:-1]
         t_val = function(a, b)
         if t_val.__class__.__name__ != 'int':
             stack[0][-1] = copy(stack[0][-1])
-        else:
-            values[stack[0][-1]] = function(a, b)
 
-        stack[0][-1].value = function(a, b)
+        stack[0][-1] = RPNToken(name=str(t_val),
+                                call_action=id_const_action,
+                                value=t_val)
         return source_position + 1
 
     return operator_action
 
 
 def unary_minus_action(self, stack, source, source_position):
-    stack[0][-1].value = -stack[0][-1].value
+    stack[0][-1] = RPNToken(name=str(-stack[0][-1].value),
+                            call_action=id_const_action,
+                            value=-stack[0][-1].value)
+    values[stack[0][-1]] = stack[0][-1].value
     return source_position + 1
 
 
@@ -43,7 +49,7 @@ def round_brace_action(self, stack, source, source_position):
 
 
 def set_action(self, stack, source, source_position):
-    stack[0][-2].value = stack[0][-1].value
+    values[stack[0][-2]] = stack[0][-1].value
     stack[0] = stack[0][:-2]
     return source_position + 1
 
@@ -55,7 +61,7 @@ def output_action(self, stack, source, source_position):
 
 
 def input_action(self, stack, source, source_position):
-    stack[0][-1].value = eval(input("hobbit input: "))
+    values[stack[0][-1]] = eval(input("hobbit input: "))
     stack[0] = stack[0][:-1]
     return source_position + 1
 

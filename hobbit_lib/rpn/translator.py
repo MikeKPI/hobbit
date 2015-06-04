@@ -29,12 +29,13 @@ PRIORITIES = dict([
     ("!=", 7),
     ("==", 7),
 
-    ("@", 8),
+    ("@", 10),
 
     ("+", 9),
     ("-", 9),
 
     ("*", 10),
+    ("%", 10),
     ("/", 10)
 ])
 
@@ -152,6 +153,10 @@ class Translator:
             else:
                 while len(stack) > 0 and \
                                 PRIORITIES[stack[-1].name] >= PRIORITIES[token.name]:
+                    if token.name == 'for' and stack[-1].name == 'if':
+                        break
+                    if token.name != '}' and stack[-1].name == 'for':
+                        break
                     if token.name == '(':
                         break
                     elif token.name == '{' and stack[-1].name == 'for':
@@ -173,6 +178,13 @@ class Translator:
                                              call_action=next_item,
                                              reference=tmp)
                         break
+                    elif token.name == 'do':
+                        rpc.append(self.get_RPNToken(create_terminal('<=', -1)))
+                        t = copy(stack[-1].reference[-1])
+                        t.name = t.name[:-1]
+                        rpc.append(t)
+                        rpc.append(self.get_RPNToken(create_terminal('UPL', -1)))
+                        rpc[-1].reference = stack[-1].reference[-1]
 
                     tmp = self.get_RPNToken(stack[-1])
                     if tmp is not None:
@@ -181,15 +193,6 @@ class Translator:
                         round_brace_flag = False
                         stack = stack[:-1 if stack[-2] in OPERATORS else -2] if len(stack) > 1 else []
                         break
-                    # elif token.name == '}':
-                    #     if stack[-1].name == 'if':
-                    #         rpc.append(stack[-1].refernce)
-                    #         stack = stack[:-1]
-                    #         break
-                    #     elif stack[-1].name == 'for':
-                    #         t = copy(stack[-1].reference[-1])
-                    #         t.name = t.name[:-1]
-                    #         rpc.append(t)
                     else:
                         stack = stack[:-1] if len(stack) > 1 else []
 
@@ -206,11 +209,13 @@ class Translator:
                             stack = stack[:-1] if len(stack) > 1 else []
                         elif stack[-1].name == 'for':
                             rpc.append(cycle_iterator[-1])
+                            rpc.append(cycle_iterator[-1])
                             tmp = Token(name=1, type='int', line_number=-1, language_id=-1)
                             tmp.value = 1
                             tmp.name = 'CONST'
                             rpc.append(self.get_RPNToken(tmp))
                             rpc.append(self.get_RPNToken(create_terminal('+', -1)))
+                            rpc.append(self.get_RPNToken(create_terminal('=', -1)))
                             t = copy(stack[-1].reference[0])
                             t.name = t.name[:-1]
                             rpc.append(t)
@@ -218,6 +223,7 @@ class Translator:
                             rpc[-1].reference = stack[-1].reference[0]
                             rpc.append(stack[-1].reference[-1])
                             stack = stack[:-1]
+                            cycle_iterator = cycle_iterator[:-1]
                     else:
                         if token.name == 'for':
                             stack.append(self.get_RPNToken(token))
