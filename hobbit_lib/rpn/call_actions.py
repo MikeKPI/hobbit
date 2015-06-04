@@ -55,13 +55,13 @@ def set_action(self, stack, source, source_position):
 
 
 def output_action(self, stack, source, source_position):
-    print("hobbit output: ", stack[0][-1].value)
+    print("hobbit output {}: ".format(stack[0][-1].name), stack[0][-1].value)
     stack[0] = stack[0][:-1]
     return source_position + 1
 
 
 def input_action(self, stack, source, source_position):
-    values[stack[0][-1]] = eval(input("hobbit input: "))
+    values[stack[0][-1]] = eval(input("hobbit input {}: ".format(stack[0][-1].name)))
     stack[0] = stack[0][:-1]
     return source_position + 1
 
